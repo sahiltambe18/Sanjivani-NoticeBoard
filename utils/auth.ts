@@ -1,8 +1,8 @@
-import prisma from '@/prisma';
-import NextAuth, { AuthOptions } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
+import prisma from "@/prisma";
+import { AuthOptions } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
-const authOptions = {
+export const authOptions = {
     providers:[
         Credentials({
             name: "credentials",
@@ -15,7 +15,8 @@ const authOptions = {
                 if(!credentials?.email || !credentials.password) return null;
 
                 const admin = await prisma.admins.findFirst({where:{
-                    email:credentials.email
+                    email:credentials.email,
+                    password: credentials.password
                 }});
 
                 if(!admin) return null;
@@ -29,8 +30,3 @@ const authOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     
 } satisfies AuthOptions;
-
-
-const handler = NextAuth(authOptions)
-
-export  {handler as GET , handler as POST};
