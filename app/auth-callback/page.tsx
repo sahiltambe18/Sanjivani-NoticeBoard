@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react"
 import  { useRouter } from "next/navigation"
 
 
-export default function  page({origin}:{origin:string | undefined}) {
+export default function  page({origin}:{origin:string }) {
   
 
   const router = useRouter();
