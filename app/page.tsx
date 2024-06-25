@@ -1,4 +1,5 @@
 
+import List from '@/components/List';
 import prisma from '../prisma';
 
 export default async function Home() {
@@ -23,29 +24,7 @@ export default async function Home() {
             <h1 className='text-6xl font-bold'>SANJIVANI SYNC</h1>
           </div>
         </div>
-        <ul className=' w-full flex flex-col items-start text-[#fffef8] overflow-y-auto  sm:pl-10'>
-          
-          {
-            data && data.map( (notice , i) =>{
-              return(
-                <div key={notice.id}>
-                  <h2 className=' text-xl'>
-                    <span className='font-light text-base' >{i+1 + ".  "}</span>
-                     { notice.title}</h2>
-                  <ul className='list-disc pl-8'>
-                    {
-                      notice.points.length > 0 && notice.points.map( ( point , idx) =>{
-                        return (
-                          <li key={idx} >{point}</li>
-                        )
-                      })
-                    }
-                  </ul>
-                </div>
-              )
-            })
-          }
-        </ul>
+        <List data={data}  />
       </div>
 
     </div>

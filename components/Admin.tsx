@@ -1,5 +1,5 @@
 "use client"
-import { useCallback, useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 
 export default function AdminPage() {
 
@@ -14,11 +14,11 @@ export default function AdminPage() {
     const [points, setPoints] = useState(['']);
     const [notices, setNotices] = useState([
         {
-            id:1,
+            id: 1,
             title: "something",
             points: ["sdc", "ddc", "dvvwdv"]
         }, {
-            id:2,
+            id: 2,
             title: "sdvsdv",
             points: ["dsvsdv", "dsvcdv"]
         }
@@ -49,14 +49,14 @@ export default function AdminPage() {
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        const newNotice = {id:Math.random(), title, points };
+        const newNotice = { id: Math.random(), title, points };
         setNotices([...notices, newNotice]);
-        const res = await fetch("/api/data",{
-            method:"POST",
+        const res = await fetch("/api/data", {
+            method: "POST",
             body: JSON.stringify(newNotice)
         })
 
-        if(!res.ok){
+        if (!res.ok) {
             return
         }
 
@@ -64,19 +64,18 @@ export default function AdminPage() {
         setPoints(['']);
     };
 
-    const handleDelete = (index:number)=>{
-        let id; 
-        setNotices( prev =>{
-           return prev.filter( ( notice , idx) => {
-            if(idx===index) id = notice.title   
-            return idx!==index
-           }) 
-        })
-        console.log(title)
+    const handleDelete =  async (index: number) => {
+        const noticeToDelete = notices[index];
+        const updatedNotices = notices.filter((_, i) => i !== index);
+        setNotices(updatedNotices);
 
-        fetch(`/api/delnotice/:${title}`,{
-            method:"DELETE"
-        })
+        const res = await fetch(`/api/delnotice/${noticeToDelete.id}`, {
+            method: "DELETE"
+        });
+
+        if (!res.ok) {
+            console.error("Failed to delete notice");
+        }
 
     }
 
@@ -134,7 +133,7 @@ export default function AdminPage() {
                     <div key={index} className="mb-3">
                         <div className='flex justify-between'>
                             <h3 className="text-xl font-semibold">{notice.title}</h3>
-                            <button className='bg-red-500 text-xs p-2 rounded-md text-white font-semibold shadow-lg' onClick={()=>{handleDelete(index)}}>Delete</button>
+                            <button className='bg-red-500 text-xs p-2 rounded-md text-white font-semibold shadow-lg' onClick={() => { handleDelete(index) }}>Delete</button>
                         </div>
                         <ul className="list-disc ml-6">
                             {notice.points.map((point, i) => (
