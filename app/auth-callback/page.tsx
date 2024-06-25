@@ -8,7 +8,7 @@ interface PageProps {
   origin: string;
 }
 
-export default function Page({ origin }: PageProps) {
+export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function Page({ origin }: PageProps) {
         const response = await fetch("/auth-callback");
         if (response.status === 200) {
           console.log("success");
-          router.push(origin ? `/${origin}` : '/admin');
+          router.push('/admin');
         }
       } catch (err) {
         console.log(err);
@@ -30,7 +30,7 @@ export default function Page({ origin }: PageProps) {
 
     signIn("credentials", {
       redirect: true,
-      callbackUrl: `${origin ? origin : '/admin'}`
+      callbackUrl: '/admin'
     });
   }, [origin, router]);
 
