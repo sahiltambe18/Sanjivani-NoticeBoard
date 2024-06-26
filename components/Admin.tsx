@@ -1,5 +1,6 @@
 "use client"
 import {  useEffect, useState } from 'react';
+import AdminNavbar from './AdminNavbar';
 
 export default function AdminPage() {
 
@@ -81,7 +82,8 @@ export default function AdminPage() {
 
     return (
         <div className="p-10">
-            <h1 className="text-3xl mb-5">Admin Page</h1>
+            <AdminNavbar/>
+            {/* <h1 className="text-3xl mb-5">Admin Page</h1> */}
             <form onSubmit={handleSubmit} className="mb-10">
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Title</label>
@@ -89,18 +91,18 @@ export default function AdminPage() {
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                        className="mt-1  w-3/6 h-10 border-2 border-gray-300 rounded-md shadow-sm"
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Points</label>
+                    <label className="block text-sm  font-medium text-gray-700">Points</label>
                     {points.map((point, index) => (
                         <div key={index} className="flex items-center mb-2">
                             <input
                                 type="text"
                                 value={point}
                                 onChange={(e) => handlePointChange(index, e.target.value)}
-                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                                className="mt-1 w-3/6 h-10   border border-gray-300 rounded-md shadow-sm"
                             />
                             <button
                                 type="button"
@@ -127,8 +129,8 @@ export default function AdminPage() {
                 </button>
             </form>
 
-            <h2 className="text-2xl mb-4">Notices</h2>
-            <div className='bg-white p-6 rounded-lg'>
+            <h2 className="text-2xl font-semibold mb-4">Notices</h2>
+            <div className='bg-white p-6 rounded-lg overflow-y-auto'>
                 {notices.map((notice, index) => (
                     <div key={index} className="mb-3">
                         <div className='flex justify-between'>
@@ -140,7 +142,7 @@ export default function AdminPage() {
                                 <li key={i}>{point}</li>
                             ))}
                         </ul>
-                        <div className='h-1 w-full bg-black'></div>
+                        <div className='h-1 w-full mt-2 bg-black'></div>
                     </div>
                 ))}
             </div>

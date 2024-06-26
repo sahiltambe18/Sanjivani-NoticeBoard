@@ -4,9 +4,7 @@ import { useEffect } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
-interface PageProps {
-  origin: string;
-}
+
 
 export default function Page() {
   const router = useRouter();
