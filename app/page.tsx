@@ -1,4 +1,3 @@
-
 import List from '@/components/List';
 import prisma from '../prisma';
 
@@ -8,18 +7,24 @@ export default async function Home() {
       createdAt:'asc'
     }
   });
-
   console.log(data)
-
   
   return (
-   <div class="h-[1024px] w-[1440px] flex flex-col items-center bg-white">
-  <img class="w-[2338px] h-[1024px] object-cover">
-  <div class="w-[1708px] h-[163px] bg-[#fbf5e7]"></div>
-  <div class="w-[1708px] h-[146px] bg-[#fbf5e7]"></div>
-  <span class="font-normal text-[110px] text-center text-black">SANJIVANI NOTICE BOARD</span>
-  <svg class="w-[1342px] h-[668px] text-black"></svg>
-  <span class="font-normal text-[30px] text-center text-black">Project By the Department of Electronics and Computer Engineering</span>
-</div>
-  );
-}
+    <div className='h-screen gap-10 items-center flex flex-col justify-start py-12 w-full' >
+      <div className='text-[#2f2b26] flex w-screen items-center justify-center  h-40 font-semibold text-6xl bg-[#fbf5e7]'>
+        SANJIVANI NOTICE BOARD
+      </div>
+      <div className='min-h-[40%] min-w-screen p-6 w-[60%] flex flex-col items-center gap-9 rounded-lg ' style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }} >
+        <div className='items-center  flex flex-col font-semibold text-[#fffef8]'>
+          <h3>Sanjivani Digital Notice Board</h3>
+          <div>
+            <h1 className='text-6xl font-bold'>SANJIVANI SYNC</h1>
+          </div>
+        </div>
+        <List data={data}  />
+      </div>
+
+    </div>
+
+        )
+      }

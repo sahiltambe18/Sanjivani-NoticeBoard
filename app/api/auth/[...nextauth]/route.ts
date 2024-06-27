@@ -1,5 +1,6 @@
 import prisma from '@/prisma';
 import NextAuth, { AuthOptions } from 'next-auth';
+import bcrypt from 'bcryptjs';
 import Credentials from 'next-auth/providers/credentials';
 
 const authOptions = {
@@ -19,9 +20,14 @@ const authOptions = {
                 }});
 
                 if(!admin) return null;
+                
+                
+                const isSame = await bcrypt.compare(credentials.password,admin.password )   
+                
+                console.log(isSame)
+                if(isSame) return admin
 
-                return admin
-
+                return null
                 
             }
         })

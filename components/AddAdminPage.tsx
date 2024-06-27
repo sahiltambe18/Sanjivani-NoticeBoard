@@ -32,14 +32,19 @@ const AddAdminPage = () => {
         body: JSON.stringify({ email, password }),
       });
 
+      const session = await response.json();
       if (response.ok) {
-        // Redirect to the admin dashboard or show success message
-        router.push('/admin');
+        // Redirect to Stripe checkout
+        // window.location.href = session.link;
+        // console.log(session)
+        // redirect(session.link)
+        // redirect(session)
+        router.push('/admin')
       } else {
-        const data = await response.json();
-        setError(data.message || 'Failed to add admin');
+        setError(session.error || 'Failed to create checkout session');
       }
     } catch (err) {
+      console.log(err)
       setError('An error occurred while adding the admin');
     }
   };
