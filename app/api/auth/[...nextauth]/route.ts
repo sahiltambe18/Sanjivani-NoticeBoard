@@ -11,6 +11,7 @@ const authOptions = {
                 email: { label: "email" , type:"email" , placeholder:"admin email"},
                 password: {label:"Password" , type:"password" , placeholder:"password"}
             },
+
             async authorize(credentials,req) {
                 //get user and return it
                 if(!credentials?.email || !credentials.password) return null;
@@ -21,18 +22,47 @@ const authOptions = {
 
                 if(!admin) return null;
                 
+                // console.log(admin)
                 
                 const isSame = await bcrypt.compare(credentials.password,admin.password )   
                 
-                console.log(isSame)
+                // console.log(isSame)
                 if(isSame) return admin
 
                 return null
                 
-            }
+            },
+
         })
     ],
     secret: process.env.NEXTAUTH_SECRET,
+    callbacks:{
+        
+        async session({ session, token }) {
+            if (!session || !session.user?.email) return session;
+      
+            const user = await prisma.admins.findFirst({
+              where: {
+                email: session.user.email,
+              },
+            });
+      
+            if (!user) {
+              return session;
+            }
+      
+            if (user.isSuperAdmin) {
+              session.user.superAdmin = true;
+            }else{
+              session.user.superAdmin = false;
+
+            }
+
+            // console.log(session)
+      
+            return session;
+          },
+    }
     
 } satisfies AuthOptions;
 

@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET!)
+const stripe = new Stripe(process.env.STRIPE_ID!)
 
 export const POST = async (req: NextRequest , res:NextResponse)=>{
     try {
@@ -31,7 +31,10 @@ export const POST = async (req: NextRequest , res:NextResponse)=>{
                 }
             }
         ],
-        metadata:data
+        metadata:{
+            email: data.email,
+            passwordHash: data.password // Example, do not store actual password hash in metadata
+        }
     });
     console.log(session)
     return NextResponse.json({link:session.url} , {status:200})

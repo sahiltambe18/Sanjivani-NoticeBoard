@@ -7,7 +7,7 @@ export default async function Home() {
       createdAt:'asc'
     }
   });
-  console.log(data)
+  // console.log(data)
   
   return (
     <div className='h-screen gap-10 items-center flex flex-col justify-start py-12 w-full' >

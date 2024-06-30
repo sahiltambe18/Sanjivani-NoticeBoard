@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const AddAdminPage = () => {
   const [email, setEmail] = useState('');
@@ -9,9 +10,18 @@ const AddAdminPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const AdminSesssion =  useSession()
+
+  if (!AdminSesssion.data?.user.superAdmin) {
+    router.push("/admin")
+  }
+
+  // console.log(AdminSesssion)
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -34,11 +44,13 @@ const AddAdminPage = () => {
 
       const session = await response.json();
       if (response.ok) {
+
+        console.log(session)
         // Redirect to Stripe checkout
         // window.location.href = session.link;
-        // console.log(session)
         // redirect(session.link)
         // redirect(session)
+        // router.push(session.link)
         router.push('/admin')
       } else {
         setError(session.error || 'Failed to create checkout session');
@@ -96,11 +108,14 @@ const AddAdminPage = () => {
         </div>
         <div className="flex items-center justify-between">
           <button
-            disabled={password!==confirmPassword || email.length==0}
+            disabled={password!==confirmPassword || email.length==0 || !AdminSesssion.data?.user.superAdmin}
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 disabled:bg-red-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Add Admin
+            {
+              AdminSesssion.data?.user.superAdmin ?"ADD ADMIN" : "NOT SUPER ADMIN"
+            }
+            
           </button>
         </div>
       </form>

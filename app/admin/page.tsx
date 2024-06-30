@@ -10,6 +10,7 @@ async function  page() {
       console.log("session not found")
         redirect(callback)
     }
+    // console.log("session is", session)
     return ( 
     <Admin/>
   )
