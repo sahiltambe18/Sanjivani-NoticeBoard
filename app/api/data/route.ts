@@ -6,6 +6,8 @@ import { authOptions } from "@/utils/auth";
 export const GET = async ()=>{
     try {
         const data = await prisma.notices.findMany();
+        
+        
         return NextResponse.json(data);
       } catch (err) {
         console.error(err);

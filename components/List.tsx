@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface dataProps {
   points: string[],
@@ -8,8 +8,33 @@ interface dataProps {
   id: string
 }
 
-export default function List({ data }: { data: dataProps[] }) {
+export default function List() {
   const listRef = useRef<HTMLUListElement>(null);
+
+  const getData = async () => {
+    let res = await fetch("/api/data", {
+      method: "GET"
+    });
+    let dt = await res.json();
+    setData(dt);
+  }
+
+  const [data, setData] = useState<dataProps[]>([
+    {
+      points: ["sdcsd", "asfdfd"],
+      title: "asasd",
+      createdAt: new Date(),
+      id: "adcf"
+    }
+  ]);
+
+  useEffect(() => {
+    getData(); 
+
+    const intervalId = setInterval(getData, 10000); // refetch 10sec
+
+    return () => clearInterval(intervalId); 
+  }, []);
 
   useEffect(() => {
     const list = listRef.current;
@@ -24,7 +49,7 @@ export default function List({ data }: { data: dataProps[] }) {
       }
     }, 50); // Adjust the speed as necessary
 
-    return () => clearInterval(scrollInterval);
+    return () => clearInterval(scrollInterval); // Clear interval on data change
   }, [data]);
 
   return (

@@ -2,11 +2,21 @@ import List from '@/components/List';
 import prisma from '../prisma';
 
 export default async function Home() {
-  const data = await prisma.notices.findMany({ 
-    orderBy: {
-      createdAt:'asc'
-    }
-  });
+  // const data = await prisma.notices.findMany({ 
+  //   orderBy: {
+  //     createdAt:'asc'
+  //   }
+  // });
+  // console.log(data)
+
+  // let res = await fetch("http://localhost:3000/api/data",{
+  //   method:"GET",
+  //   next:{
+  //     revalidate:2000
+  //   }
+  // });
+  // const data = await res.json()
+
   // console.log(data)
   
   return (
@@ -21,7 +31,8 @@ export default async function Home() {
             <h1 className='text-6xl font-bold'>SANJIVANI SYNC</h1>
           </div>
         </div>
-        <List data={data}  />
+        {/* <List data={data}  /> */}
+        <List />
       </div>
 
     </div>
