@@ -25,17 +25,27 @@ export const POST = async (req:NextRequest)=>{
     }
     
     const notice = await req.json();
-    if (!notice || !notice.title || !notice.points) {
+    if (!notice ) {
       return new NextResponse("Invalid Notice Data", { status: 400 });
     }
 
+    if(notice.imageUrl){
 
+      await prisma.notices.create({
+        data: {
+          title: notice.title,
+          points: notice.points,
+          imageUrl: notice.imageUrl
+        },
+      });
+    }else{
       await prisma.notices.create({
         data: {
           title: notice.title,
           points: notice.points,
         },
       });
+    }
   
       return new NextResponse("Notice Added", { status: 200 });
   

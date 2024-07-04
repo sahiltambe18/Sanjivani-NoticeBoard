@@ -14,15 +14,16 @@ datasource db {
 }
 
 model Admins {
-  id       String @id @default(uuid()) @map("_id")
-  email    String @unique
+  id           String  @id @default(uuid()) @map("_id")
+  email        String  @unique
   isSuperAdmin Boolean @default(false)
-  password String
+  password     String
 }
 
-model Notices{
-  id String @default(uuid()) @map("_id") @id
-  title String 
-  points String[]
+model Notices {
+  id        String   @id @default(uuid()) @map("_id")
+  title     String?
+  points    String[]
   createdAt DateTime @default(now())
+  imageUrl  String?
 }

@@ -2,6 +2,11 @@
 import { useEffect, useState } from 'react';
 import AdminNavbar from './AdminNavbar';
 import { useSession } from 'next-auth/react';
+import UploadButton from './UploadButton';
+import { handleUpload } from '@/utils/upload';
+import { typeNotice } from '@/types/notices';
+
+
 
 export default function AdminPage() {
 
@@ -27,17 +32,7 @@ export default function AdminPage() {
         email: "xyz@gmail.com",
         id: "44"
     }]);
-    const [notices, setNotices] = useState([
-        {
-            id: 1,
-            title: "something",
-            points: ["sdc", "ddc", "dvvwdv"]
-        }, {
-            id: 2,
-            title: "sdvsdv",
-            points: ["dsvsdv", "dsvcdv"]
-        }
-    ]);
+    const [notices, setNotices] = useState<typeNotice[]>([]);
 
     const [showAdmins, setShowAdmins] = useState<boolean>(false)
     const [showNotice, setShowNotice] = useState<boolean>(false)
@@ -73,22 +68,7 @@ export default function AdminPage() {
         setPoints(newPoints);
     };
 
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
-        const newNotice = { id: Math.random(), title, points };
-        setNotices([...notices, newNotice]);
-        const res = await fetch("/api/data", {
-            method: "POST",
-            body: JSON.stringify(newNotice)
-        })
-
-        if (!res.ok) {
-            return
-        }
-
-        setTitle('');
-        setPoints(['']);
-    };
+   
 
     const handleDelete = async (index: number) => {
         const noticeToDelete = notices[index];
@@ -119,11 +99,43 @@ export default function AdminPage() {
         }
     }
 
+    const handleAction = async (formData : FormData)=>{
+        const data = await handleUpload(formData);
+        formData.set("image","")
+        
+        let newNotice : typeNotice = { id: Math.random(), title, points };
+        if(data.url){
+            newNotice = {...newNotice , imageUrl : data.url}
+        }
+        setNotices([...notices, newNotice]);
+        const res = await fetch("/api/data", {
+            method: "POST",
+            body: JSON.stringify(newNotice)
+        })
+
+        if (!res.ok) {
+            return
+        }
+
+        window.location.reload()
+
+        setTitle('');
+        setPoints(['']);
+
+        
+    }
+
+ 
+   
+
+
+
     return (
         <div className="p-10">
             <AdminNavbar />
             {/* <h1 className="text-3xl mb-5">Admin Page</h1> */}
-            <form onSubmit={handleSubmit} className="mb-10">
+            {/* <form action={handleAction}  onSubmit={handleSubmit} className="mb-10"> */}
+            <form  action={handleAction}  className="mb-10">
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Title</label>
                     <input
@@ -155,10 +167,15 @@ export default function AdminPage() {
                     <button
                         type="button"
                         onClick={handleAddPoint}
-                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md"
+                        className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md"
                     >
                         Add Point
                     </button>
+                </div>
+                {/* image upload */}
+                <div>
+                    <UploadButton/>
+                    <input type="file" id='image' name={"image"}   accept='image/*' />
                 </div>
                 <button
                     type="submit"
@@ -184,7 +201,10 @@ export default function AdminPage() {
                             <div key={index} className="mb-3">
                                 <div className='flex justify-between'>
                                     <h3 className="text-xl font-semibold">{admin.email}</h3>
-                                    <button className='bg-red-500 text-xs p-2 rounded-md text-white font-semibold shadow-lg' onClick={() => { handleDeleteAdmin(index) }}>Delete</button>
+                                    <button className='bg-red-500 text-xs p-2 rounded-md text-white font-semibold shadow-lg'
+                                        onClick={() => { handleDeleteAdmin(index) }}>
+                                        Delete
+                                    </button>
                                 </div>
                                 <div className='h-1 w-full mt-2 bg-black'></div>
                             </div>
@@ -212,6 +232,9 @@ export default function AdminPage() {
                                     <li key={i}>{point}</li>
                                 ))}
                             </ul>
+                            {
+                                notice.imageUrl
+                            }
                             <div className='h-1 w-full mt-2 bg-black'></div>
                         </div>
                     ))}
