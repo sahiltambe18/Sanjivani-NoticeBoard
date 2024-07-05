@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import AdminNavbar from './AdminNavbar';
 import { useSession } from 'next-auth/react';
-import UploadButton from './UploadButton';
 import { handleUpload } from '@/utils/upload';
 import { typeNotice } from '@/types/notices';
 
@@ -142,7 +141,7 @@ export default function AdminPage() {
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="mt-1  w-3/6 h-10 border-2 border-gray-300 rounded-md shadow-sm"
+                        className="mt-1 px-2 w-3/6 h-10 border-2 border-gray-300 rounded-md shadow-sm"
                     />
                 </div>
                 <div className="mb-4">
@@ -153,7 +152,7 @@ export default function AdminPage() {
                                 type="text"
                                 value={point}
                                 onChange={(e) => handlePointChange(index, e.target.value)}
-                                className="mt-1 w-3/6 h-10   border border-gray-300 rounded-md shadow-sm"
+                                className="mt-1 px-2 w-3/6 h-10   border border-gray-300 rounded-md shadow-sm"
                             />
                             <button
                                 type="button"
@@ -173,9 +172,9 @@ export default function AdminPage() {
                     </button>
                 </div>
                 {/* image upload */}
-                <div>
-                    <UploadButton/>
-                    <input type="file" id='image' name={"image"}   accept='image/*' />
+                <div className='my-3 font-semibold'>
+                   <label >Upload Image </label>
+                    <input placeholder='Upload Image'  type="file" id='image' name={"image"}   accept='image/*' />
                 </div>
                 <button
                     type="submit"

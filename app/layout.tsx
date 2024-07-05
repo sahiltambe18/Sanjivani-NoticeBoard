@@ -29,6 +29,7 @@ export default async function RootLayout({
       <AuthProvider session={session} >
         {children}
       </AuthProvider>
+      
       </body>
     </html>
   );

@@ -28,7 +28,7 @@ const AdminNavbar = () => {
 
   return (
     <nav className=" border-b-4 mb-5 border-b-slate-800  p-4 flex justify-between items-center">
-      <div className="text-slate-700 text-lg font-bold">Admin Dashboard</div>
+      <div className="text-slate-700 text-lg font-bold">Admin : {session.data?.user.email}</div>
       <div>
         {/* super Admin */}
         {superAdmin==true && 
