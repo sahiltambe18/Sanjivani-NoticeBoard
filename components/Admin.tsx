@@ -67,7 +67,7 @@ export default function AdminPage() {
         setPoints(newPoints);
     };
 
-   
+
 
     const handleDelete = async (index: number) => {
         const noticeToDelete = notices[index];
@@ -98,14 +98,15 @@ export default function AdminPage() {
         }
     }
 
-    const handleAction = async (formData : FormData)=>{
+    const handleAction = async (formData: FormData) => {
         const data = await handleUpload(formData);
-        formData.set("image","")
-        
-        let newNotice : typeNotice = { id: Math.random(), title, points };
-        if(data.url){
-            newNotice = {...newNotice , imageUrl : data.url}
+        let newNotice: typeNotice = { id: Math.random(), title, points };
+        const file = formData.get("image") as unknown as File;
+        if (file) {
+            newNotice = { ...newNotice, imageUrl: data.url }
+            formData.set("image", "")
         }
+
         setNotices([...notices, newNotice]);
         const res = await fetch("/api/data", {
             method: "POST",
@@ -121,11 +122,11 @@ export default function AdminPage() {
         setTitle('');
         setPoints(['']);
 
-        
+
     }
 
- 
-   
+
+
 
 
 
@@ -134,7 +135,7 @@ export default function AdminPage() {
             <AdminNavbar />
             {/* <h1 className="text-3xl mb-5">Admin Page</h1> */}
             {/* <form action={handleAction}  onSubmit={handleSubmit} className="mb-10"> */}
-            <form  action={handleAction}  className="mb-10">
+            <form action={handleAction} className="mb-10">
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Title</label>
                     <input
@@ -173,8 +174,8 @@ export default function AdminPage() {
                 </div>
                 {/* image upload */}
                 <div className='my-3 font-semibold'>
-                   <label >Upload Image </label>
-                    <input placeholder='Upload Image'  type="file" id='image' name={"image"}   accept='image/*' />
+                    <label >Upload Image </label>
+                    <input placeholder='Upload Image' type="file" id='image' name={"image"} accept='image/*' />
                 </div>
                 <button
                     type="submit"
