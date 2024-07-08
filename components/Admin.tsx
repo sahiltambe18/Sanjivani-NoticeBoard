@@ -232,7 +232,8 @@ export default function AdminPage() {
                                 ))}
                             </ul>
                             {
-                                notice.imageUrl
+                                notice.imageUrl &&
+                                (<p>{notice.imageUrl}</p>)
                             }
                             <div className='h-1 w-full mt-2 bg-black'></div>
                         </div>
