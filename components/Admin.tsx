@@ -99,14 +99,16 @@ export default function AdminPage() {
     }
 
     const handleAction = async (formData: FormData) => {
-        const data = await handleUpload(formData);
+
         let newNotice: typeNotice = { id: Math.random(), title, points };
         const file = formData.get("image") as unknown as File;
+        
         if (file) {
+            const data = await handleUpload(formData);
             newNotice = { ...newNotice, imageUrl: data.url }
             formData.set("image", "")
         }
-
+        
         setNotices([...notices, newNotice]);
         const res = await fetch("/api/data", {
             method: "POST",
@@ -117,7 +119,7 @@ export default function AdminPage() {
             return
         }
 
-        window.location.reload()
+        // window.location.reload()
 
         setTitle('');
         setPoints(['']);
