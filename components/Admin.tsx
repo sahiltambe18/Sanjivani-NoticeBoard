@@ -100,10 +100,9 @@ export default function AdminPage() {
 
     const handleAction = async (formData: FormData) => {
 
-        let newNotice: typeNotice = { id: Math.random(), title, points };
+        let newNotice: typeNotice = { id: Math.random(), title, points  };
         const file = formData.get("image") as unknown as File;
-        
-        if (file) {
+        if (file && file.size>0) {
             const data = await handleUpload(formData);
             newNotice = { ...newNotice, imageUrl: data.url }
             formData.set("image", "")
