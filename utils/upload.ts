@@ -8,8 +8,8 @@ export interface UploadResponse {
     error?: string;
 }
 
-export const handleUpload = async (data: FormData): Promise<UploadResponse> => {
-    const file = data.get("image") as unknown as File;
+export const handleUpload = async (data: FormData , type: string = "image"): Promise<UploadResponse> => {
+    const file = data.get(type) as unknown as File;
     if (!file) {
         return { error: "No file uploaded" };
     }
@@ -19,7 +19,9 @@ export const handleUpload = async (data: FormData): Promise<UploadResponse> => {
 
     try {
         const res = await new Promise<{ secure_url: string }>((resolve, reject) => {
-            cloudinary.uploader.upload_stream({}, (err, result) => {
+            cloudinary.uploader.upload_stream({
+                resource_type: type=="video" ? "video": "image"
+            }, (err, result) => {
                 if (err) {
                     console.error(err);
                     reject(err);

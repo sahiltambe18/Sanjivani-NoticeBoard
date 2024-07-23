@@ -26,6 +26,7 @@ export default function AdminPage() {
     }
 
     const [title, setTitle] = useState('');
+    const [error, setError] = useState('');
     const [points, setPoints] = useState(['']);
     const [admins, setAdmins] = useState([{
         email: "xyz@gmail.com",
@@ -99,13 +100,31 @@ export default function AdminPage() {
     }
 
     const handleAction = async (formData: FormData) => {
-
+        setError("")
         let newNotice: typeNotice = { id: Math.random(), title, points  };
-        const file = formData.get("image") as unknown as File;
-        if (file && file.size>0) {
+        const fileI = formData.get("image") as unknown as File;
+        const fileV = formData.get("video") as unknown as File;
+
+        const maxSize = 90*1024*1024;
+
+        if (fileI && fileI.size>0) {
+            if(fileI.size>maxSize) {
+                setError("max size of image is 90 Mb")
+                return;
+            }
             const data = await handleUpload(formData);
             newNotice = { ...newNotice, imageUrl: data.url }
             formData.set("image", "")
+        } 
+        if(fileV && fileV.size>0){
+            if(fileV.size>maxSize) {
+                setError("max size of video is 90 Mb")
+                return;
+            }
+            const data = await handleUpload(formData,"video");
+            newNotice = { ...newNotice, videoUrl: data.url }
+            formData.set("video", "")
+
         }
         
         setNotices([...notices, newNotice]);
@@ -137,6 +156,9 @@ export default function AdminPage() {
             {/* <h1 className="text-3xl mb-5">Admin Page</h1> */}
             {/* <form action={handleAction}  onSubmit={handleSubmit} className="mb-10"> */}
             <form action={handleAction} className="mb-10">
+                <p className=' text-base text-red-600' >
+                    {error}
+                </p>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Title</label>
                     <input
@@ -176,7 +198,12 @@ export default function AdminPage() {
                 {/* image upload */}
                 <div className='my-3 font-semibold'>
                     <label >Upload Image </label>
-                    <input placeholder='Upload Image' type="file" id='image' name={"image"} accept='image/*' />
+                    <input placeholder='Upload Image' type="file" id='image' accept='image/*' name={"image"}  />
+                </div>
+                {/* video upload */}
+                <div className='my-3 font-semibold'>
+                    <label >Upload Video </label>
+                    <input placeholder='Upload Video' type="file" id='video' accept='video/*' name={"video"}  />
                 </div>
                 <button
                     type="submit"

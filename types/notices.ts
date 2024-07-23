@@ -3,6 +3,7 @@ export interface typeNotice{
     title?: string;
     points: string[];
     imageUrl?: string;
+    videoUrl?: string;
     createdAt? : Date
 }
 

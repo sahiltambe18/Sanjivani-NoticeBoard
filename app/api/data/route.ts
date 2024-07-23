@@ -24,29 +24,19 @@ export const POST = async (req:NextRequest)=>{
       return new NextResponse("Unauthorised Request" , {status:401})    
     }
     
-    const notice = await req.json();
+    let notice = await req.json();
+    delete notice.id
     if (!notice ) {
       return new NextResponse("Invalid Notice Data", { status: 400 });
     }
 
-    if(notice.imageUrl){
+    // console.log(notice)
 
-      await prisma.notices.create({
-        data: {
-          title: notice.title,
-          points: notice.points,
-          imageUrl: notice.imageUrl
-        },
-      });
-    }else{
-      await prisma.notices.create({
-        data: {
-          title: notice.title,
-          points: notice.points,
-        },
-      });
-    }
-  
+    await prisma.notices.create({
+      data:{
+        ...notice
+      }
+    });
       return new NextResponse("Notice Added", { status: 200 });
   
     } catch (error) {
