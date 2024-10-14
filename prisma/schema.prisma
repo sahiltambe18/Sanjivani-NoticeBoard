@@ -27,4 +27,5 @@ model Notices {
   createdAt DateTime @default(now())
   imageUrl  String?
   videoUrl  String?
+  department String @default("students")
 }

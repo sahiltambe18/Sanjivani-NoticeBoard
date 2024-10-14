@@ -16,6 +16,9 @@ export default function AdminPage() {
         const data = await res.json()
         // console.log(data)
         setNotices([...data])
+        console.log(data)
+
+        setDepartments( Array.from( new Set(data.map((dt: typeNotice) => dt.department))));
     }
 
     const getAdmins = async () => {
@@ -33,6 +36,7 @@ export default function AdminPage() {
         id: "44"
     }]);
     const [notices, setNotices] = useState<typeNotice[]>([]);
+    const [departments, setDepartments] = useState<string[]>([]);
 
     const [showAdmins, setShowAdmins] = useState<boolean>(false)
     const [showNotice, setShowNotice] = useState<boolean>(false)
@@ -49,6 +53,15 @@ export default function AdminPage() {
         getData()
         getAdmins()
     }, [])
+
+    // Dropdown field states
+    const [dropdownValue, setDropdownValue] = useState('');  // For predefined options
+    const [customValue, setCustomValue] = useState('');      // For custom input
+    const [useCustomValue, setUseCustomValue] = useState(false);  // Whether to use custom input
+
+    // Predefined options array
+    const predefinedOptions = departments;
+
 
 
 
@@ -101,7 +114,11 @@ export default function AdminPage() {
 
     const handleAction = async (formData: FormData) => {
         setError("")
-        let newNotice: typeNotice = { id: Math.random(), title, points  };
+        let newNotice: typeNotice = { 
+            id: Math.random(),
+             title, points , 
+            department: useCustomValue ? customValue : dropdownValue
+         };
         const fileI = formData.get("image") as unknown as File;
         const fileV = formData.get("video") as unknown as File;
 
@@ -126,6 +143,8 @@ export default function AdminPage() {
             formData.set("video", "")
 
         }
+
+        console.log(newNotice)
         
         setNotices([...notices, newNotice]);
         const res = await fetch("/api/data", {
@@ -205,6 +224,43 @@ export default function AdminPage() {
                     <label >Upload Video </label>
                     <input placeholder='Upload Video' type="file" id='video' accept='video/*' name={"video"}  />
                 </div>
+
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Select or Add Custom Value</label>
+                    <select
+                        value={useCustomValue ? '' : dropdownValue}
+                        onChange={(e) => {
+                            setDropdownValue(e.target.value);
+                            setUseCustomValue(false);
+                        }}
+                        className="mt-1 px-2 w-2/6 h-10 border border-gray-300 rounded-md shadow-sm"
+                    >
+                        <option value="">Select an option</option>
+                        {predefinedOptions.map((option, index) => (
+                            <option key={index} value={option}>{option}</option>
+                        ))}
+                    </select>
+
+                    <div className="flex items-center mt-2">
+                        <input
+                            type="checkbox"
+                            checked={useCustomValue}
+                            onChange={() => setUseCustomValue(prev => !prev)}
+                            className="mr-2"
+                        />
+                        <span>Or add custom value:</span>
+                    </div>
+
+                    {useCustomValue && (
+                        <input
+                            type="text"
+                            value={customValue}
+                            onChange={(e) => setCustomValue(e.target.value)}
+                            className="mt-2 px-2 w-2/6 h-10 border border-gray-300 rounded-md shadow-sm"
+                        />
+                    )}
+                </div>
+
                 <button
                     type="submit"
                     className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md"

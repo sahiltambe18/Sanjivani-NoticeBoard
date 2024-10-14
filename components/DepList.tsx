@@ -3,7 +3,7 @@ import { typeNotice } from '@/types/notices';
 import React, { useEffect, useRef, useState } from 'react'
 
 
-export default function List() {
+export default function DepList({depId}:{depId:string}) {
   const listRef = useRef<HTMLUListElement>(null);
 
 
@@ -13,7 +13,7 @@ export default function List() {
     });
     let dt = await res.json();
 
-    setData(dt.filter((d: typeNotice) => d.department === 'students'));
+    setData(dt.filter((d: typeNotice) => d.department === depId));
   
   }
 

@@ -32,6 +32,10 @@ export const POST = async (req:NextRequest)=>{
 
     // console.log(notice)
 
+    if(notice.department===''){
+      notice.department = 'students'
+    }
+
     await prisma.notices.create({
       data:{
         ...notice
