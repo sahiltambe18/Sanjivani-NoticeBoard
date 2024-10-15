@@ -5,6 +5,7 @@ export interface typeNotice{
     imageUrl?: string;
     videoUrl?: string;
     createdAt? : Date
+    department?: string
 }
 
 export interface Admin {

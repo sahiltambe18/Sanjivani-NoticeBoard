@@ -30,7 +30,7 @@ export default function Page() {
       redirect: true,
       callbackUrl: '/admin'
     });
-  }, [origin, router]);
+  }, [router]);
 
   return (
     <div className="p-10 flex text-3xl flex-col items-center">

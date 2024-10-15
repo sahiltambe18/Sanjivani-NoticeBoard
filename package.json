@@ -15,6 +15,7 @@
     "cloudinary": "^2.2.0",
     "next": "14.2.4",
     "next-auth": "^4.24.7",
+    "notice-app": "file:",
     "prisma": "^5.15.1",
     "react": "^18",
     "react-dom": "^18",
