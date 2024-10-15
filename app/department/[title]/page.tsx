@@ -29,7 +29,7 @@ export default async function Home({params}:{ params: { title: string}}) {
         SANJIVANI NOTICE BOARD
       </div>
 
-      <div className='min-h-[40%] min-w-screen p-6 w-[60%] flex flex-col items-center gap-4 rounded-lg ' style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }} >
+      <div className='min-h-[40%] min-w-screen p-6 w-[95%] flex flex-col items-center gap-4 rounded-lg ' style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }} >
         <div className='items-center  flex flex-col font-semibold text-[#fffef8]'>
           
         </div>
