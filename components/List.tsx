@@ -59,10 +59,10 @@ export default function List() {
   return (
     <ul ref={listRef} className='w-full hide-scrollbar flex flex-col items-start text-[#fffef8] overflow-y-auto sm:pl-10' style={{ maxHeight: '100vh' }}>
       {data && data.map((notice, i) => (
-        <div className='my-4 flex flex-col gap-2' key={notice.id}>
+        <div className='my-6 flex flex-col gap-4' key={notice.id}>
           {notice.title && <>
-            <h2 className='text-xl'>
-              <span className='font-light text-base'>{i + 1 + ".  "}</span>
+            <h2 className='text-3xl font-bold'>
+              <span className='font-light text-2xl'>{i + 1 + ".  "}</span>
               {notice.title}
             </h2>
             <ul className='list-disc pl-8'>
