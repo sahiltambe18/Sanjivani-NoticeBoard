@@ -8,12 +8,12 @@ export default async function Home({params}:{ params: { title: string}}) {
       createdAt:'asc'
     },
     where:{
-        department: params.title
+        department: params.title || 'toAll'
     }
   });
 
   if(data.length===0){
-    return <h1>No notices found for this department.</h1>  // return a message if no notices found for the department.  else return the list of notices.  // replace the hardcoded department name with dynamic parameter.  // use the prisma client to fetch the data from the database.  // use the List component to render the notices.  // use the DepList component to render the department name.  // use the useSession hook to check if the user is authenticated.  // if not authenticated, redirect to the login page.  // if authenticated, display the admin dashboard.  // use the useRouter hook to get the route parameter (department name) and pass it to the Home component.  // use the NextLink component to navigate to the department page.  // use the useRouter hook to get the route parameter (department name) and pass it to the DepList component.  // use the useRouter hook to get the route parameter (department
+    return <h1>No notices found for this department.</h1>  
   }
   // console.log(data)
 
