@@ -13,7 +13,7 @@ export default function List() {
     });
     let dt = await res.json();
 
-    setData(dt.filter((d: typeNotice) => d.department === 'students'));
+    setData(dt.filter((d: typeNotice) => d.department === 'students' || d.department ==='toAll'));
   
   }
 

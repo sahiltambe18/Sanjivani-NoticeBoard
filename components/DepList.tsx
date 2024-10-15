@@ -13,7 +13,7 @@ export default function DepList({depId}:{depId:string}) {
     });
     let dt = await res.json();
 
-    setData(dt.filter((d: typeNotice) => d.department === depId));
+    setData(dt.filter((d: typeNotice) => d.department === depId || d.department ==='toAll'));
   
   }
 
