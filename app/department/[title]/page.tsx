@@ -31,10 +31,7 @@ export default async function Home({params}:{ params: { title: string}}) {
 
       <div className='min-h-[40%] min-w-screen p-6 w-[60%] flex flex-col items-center gap-4 rounded-lg ' style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }} >
         <div className='items-center  flex flex-col font-semibold text-[#fffef8]'>
-          <h3>Sanjivani Digital Notice Board</h3>
-          <div>
-            <h1 className='text-6xl font-bold'>SANJIVANI SYNC</h1>
-          </div>
+          
         </div>
         {/* <List data={data}  /> */}
         <DepList  depId={params.title} />
