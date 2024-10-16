@@ -263,7 +263,7 @@ export default function AdminPage() {
                                     className='font-semibold px-2 py-1 rounded-lg bg-red-600 text-white'
                                     onClick={() => handleDelete(index)}
                                 >
-                                    Delete Notice
+                                    Delete Notiice
                                 </button>
                             </div>
                             <ul className='list-disc pl-4 text-gray-900 text-lg'>
