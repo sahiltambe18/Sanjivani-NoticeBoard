@@ -14,15 +14,13 @@ export default function AdminPage() {
     const getData = async () => {
         let res = await fetch("/api/data");
         const data = await res.json()
-        // console.log(data)
         setNotices([...data])
         console.log(data)
 
-        setDepartments( Array.from( new Set(data.map((dt: typeNotice) => dt.department))));
+        setDepartments(Array.from(new Set(data.map((dt: typeNotice) => dt.department))));
     }
 
     const getAdmins = async () => {
-
         let res = await fetch('/api/admin');
         const adminData = await res.json();
         setAdmins(([...adminData]))
@@ -54,17 +52,11 @@ export default function AdminPage() {
         getAdmins()
     }, [])
 
-    // Dropdown field states
-    const [dropdownValue, setDropdownValue] = useState('');  // For predefined options
-    const [customValue, setCustomValue] = useState('');      // For custom input
-    const [useCustomValue, setUseCustomValue] = useState(false);  // Whether to use custom input
+    const [dropdownValue, setDropdownValue] = useState('');
+    const [customValue, setCustomValue] = useState('');
+    const [useCustomValue, setUseCustomValue] = useState(false);
 
-    // Predefined options array
     const predefinedOptions = departments;
-
-
-
-
 
     const handleAddPoint = () => {
         setPoints([...points, '']);
@@ -80,8 +72,6 @@ export default function AdminPage() {
         newPoints[index] = value;
         setPoints(newPoints);
     };
-
-
 
     const handleDelete = async (index: number) => {
         const noticeToDelete = notices[index];
@@ -156,28 +146,17 @@ export default function AdminPage() {
             return
         }
 
-        // window.location.reload()
-
         setTitle('');
         setPoints(['']);
-
-
     }
-
-
-
-
 
 
     return (
         <div className="p-10">
             <AdminNavbar />
-            {/* <h1 className="text-3xl mb-5">Admin Page</h1> */}
-            {/* <form action={handleAction}  onSubmit={handleSubmit} className="mb-10"> */}
+
             <form action={handleAction} className="mb-10">
-                <p className=' text-base text-red-600' >
-                    {error}
-                </p>
+                <p className='text-base text-red-600'>{error}</p>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Title</label>
                     <input
@@ -188,14 +167,14 @@ export default function AdminPage() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-sm  font-medium text-gray-700">Points</label>
+                    <label className="block text-sm font-medium text-gray-700">Points</label>
                     {points.map((point, index) => (
                         <div key={index} className="flex items-center mb-2">
                             <input
                                 type="text"
                                 value={point}
                                 onChange={(e) => handlePointChange(index, e.target.value)}
-                                className="mt-1 px-2 w-3/6 h-10   border border-gray-300 rounded-md shadow-sm"
+                                className="mt-1 px-2 w-3/6 h-10 border border-gray-300 rounded-md shadow-sm"
                             />
                             <button
                                 type="button"
@@ -214,15 +193,15 @@ export default function AdminPage() {
                         Add Point
                     </button>
                 </div>
-                {/* image upload */}
+
+                {/* Uploads */}
                 <div className='my-3 font-semibold'>
-                    <label >Upload Image </label>
-                    <input placeholder='Upload Image' type="file" id='image' accept='image/*' name={"image"}  />
+                    <label>Upload Image</label>
+                    <input type="file" id='image' accept='image/*' name={"image"} />
                 </div>
-                {/* video upload */}
                 <div className='my-3 font-semibold'>
-                    <label >Upload Video </label>
-                    <input placeholder='Upload Video' type="file" id='video' accept='video/*' name={"video"}  />
+                    <label>Upload Video</label>
+                    <input type="file" id='video' accept='video/*' name={"video"} />
                 </div>
 
                 <div className="mb-4">
@@ -269,62 +248,65 @@ export default function AdminPage() {
                 </button>
             </form>
 
-            {
-                session.data?.user.superAdmin &&
-                <button className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md mr-3" onClick={handleShowAdmin}>
-                    {showAdmins ? "Hide" : "Show"} Admins
-                </button>}
-
-            {
-                session.data?.user.superAdmin &&
-                showAdmins &&
-                <>
-                    {/* <h2 className="text-2xl text-white underline font-semibold mb-4">Admins</h2> */}
-                    <div className='bg-white h-80 p-6 my-3 rounded-lg overflow-y-auto'>
-                        {admins.map((admin, index) => (
-                            <div key={index} className="mb-3">
-                                <div className='flex justify-between'>
-                                    <h3 className="text-xl font-semibold">{admin.email}</h3>
-                                    <button className='bg-red-500 text-xs p-2 rounded-md text-white font-semibold shadow-lg'
-                                        onClick={() => { handleDeleteAdmin(index) }}>
-                                        Delete
-                                    </button>
+            {departments.map((department) => (
+                <div key={department} className="mb-6">
+                    <h2 className="text-2xl font-semibold mb-2">{department} Department Notices</h2>
+                    <div className='bg-white p-6 h-80 my-3 rounded-lg overflow-y-auto'>
+                        {notices
+                            .filter(notice => notice.department === department)
+                            .map((notice, index) => (
+                                <div key={index} className="mb-3">
+                                    <div className='flex justify-between'>
+                                        <div className="text-3xl font-bold text-blue-900 my-2">{notice.title}</div>
+                                        <button
+                                            className='font-semibold px-2 py-1 rounded-lg bg-red-600 text-white'
+                                            onClick={() => handleDelete(index)}
+                                        >
+                                            Delete Notice
+                                        </button>
+                                    </div>
+                                    <ul className='list-disc pl-4 text-gray-900 text-lg'>
+                                        {notice.points.map((point, i) => (
+                                            <li key={i}>{point}</li>
+                                        ))}
+                                    </ul>
+                                    {notice.imageUrl && <img src={notice.imageUrl} alt="Notice" className="w-full h-auto mt-2" />}
+                                    {notice.videoUrl && (
+                                        <video controls className="w-full h-auto mt-2">
+                                            <source src={notice.videoUrl} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    )}
                                 </div>
-                                <div className='h-1 w-full mt-2 bg-black'></div>
+                            ))}
+                    </div>
+                </div>
+            ))}
+
+            {/* Admins Section */}
+            <button
+                className='px-4 py-2 bg-blue-500 text-white rounded-md mb-5'
+                onClick={handleShowAdmin}
+            >Show Admins</button>
+
+            {showAdmins && (
+                <div className="bg-white p-4 shadow rounded-lg">
+                    <div className='grid grid-cols-3 gap-4'>
+                        {admins.map((admin, index) => (
+                            <div key={admin.email} className='p-3 text-lg bg-gray-200'>
+                                <p className='font-semibold'>{admin.email}</p>
+                                <button
+                                    className='font-semibold px-2 py-1 rounded-lg bg-red-600 text-white mt-2'
+                                    onClick={() => handleDeleteAdmin(index)}
+                                >
+                                    Delete
+                                </button>
                             </div>
                         ))}
                     </div>
-                </>
-            }
-
-
-            <button className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md" onClick={handleShowNotice}>
-                {showNotice ? "Hide" : "Show"} Notices
-            </button>
-
-            {showNotice && <>
-                {/* <h2 className="text-2xl font-semibold mb-4">Notices</h2> */}
-                <div className='bg-white p-6 h-80 my-3 rounded-lg overflow-y-auto'>
-                    {notices.map((notice, index) => (
-                        <div key={index} className="mb-3">
-                            <div className='flex justify-between'>
-                                <h3 className="text-xl font-semibold">{notice.title}</h3>
-                                <button className='bg-red-500 text-xs p-2 rounded-md text-white font-semibold shadow-lg' onClick={() => { handleDelete(index) }}>Delete</button>
-                            </div>
-                            <ul className="list-disc ml-6">
-                                {notice.points.map((point, i) => (
-                                    <li key={i}>{point}</li>
-                                ))}
-                            </ul>
-                            {
-                                notice.imageUrl &&
-                                (<p>{notice.imageUrl}</p>)
-                            }
-                            <div className='h-1 w-full mt-2 bg-black'></div>
-                        </div>
-                    ))}
                 </div>
-            </>}
+            )}
+
         </div>
     );
 }
