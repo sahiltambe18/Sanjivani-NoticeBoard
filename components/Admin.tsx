@@ -249,36 +249,18 @@ export default function AdminPage() {
             </form>
 
             {departments.map((department) => (
-    <div key={department} className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">{department} Department Notices</h2>
-        <button
-            className='bg-blue-600 text-white p-2 rounded-lg'
-            onClick={() => openModal(department)} // Open the modal on click
-        >
-            View Notices
-        </button>
-
-        {/* Modal for showing notices */}
-        {showModal && selectedDepartment === department && (
-            <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-                <div className="bg-white p-6 rounded-lg w-3/4 max-w-lg relative">
-                    <button
-                        className="absolute top-2 right-2 text-gray-500"
-                        onClick={closeModal} // Close the modal
-                    >
-                        X
-                    </button>
-                    <h2 className="text-2xl font-semibold mb-2">{selectedDepartment} Department Notices</h2>
+                <div key={department} className="mb-6">
+                    <h2 className="text-2xl font-semibold mb-2">{department} Department Notices</h2>
                     <div className='bg-white p-6 h-80 my-3 rounded-lg overflow-y-auto'>
                         {notices
-                            .filter(notice => notice.department === selectedDepartment)
+                            .filter(notice => notice.department === department)
                             .map((notice, index) => (
                                 <div key={index} className="mb-3">
                                     <div className='flex justify-between'>
                                         <div className="text-3xl font-bold text-blue-900 my-2">{notice.title}</div>
                                         <button
                                             className='font-semibold px-2 py-1 rounded-lg bg-red-600 text-white'
-                                            onClick={() => handleDelete(index)} // Handle delete notice
+                                            onClick={() => handleDelete(index)}
                                         >
                                             Delete Notice
                                         </button>
@@ -299,11 +281,7 @@ export default function AdminPage() {
                             ))}
                     </div>
                 </div>
-            </div>
-        )}
-    </div>
-))}
-
+            ))}
 
             {/* Admins Section */}
             <button
