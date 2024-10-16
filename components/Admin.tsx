@@ -249,39 +249,42 @@ export default function AdminPage() {
             </form>
 
             {departments.map((department) => (
-                <div key={department} className="mb-6">
-                    <h2 className="text-2xl font-semibold mb-2">{department} Department Notices</h2>
-                    <div className='bg-white p-6 h-80 my-3 rounded-lg overflow-y-auto'>
-                        {notices
-                            .filter(notice => notice.department === department)
-                            .map((notice, index) => (
-                                <div key={index} className="mb-3">
-                                    <div className='flex justify-between'>
-                                        <div className="text-3xl font-bold text-blue-900 my-2">{notice.title}</div>
-                                        <button
-                                            className='font-semibold px-2 py-1 rounded-lg bg-red-600 text-white'
-                                            onClick={() => handleDelete(index)}
-                                        >
-                                            Delete Notice
-                                        </button>
-                                    </div>
-                                    <ul className='list-disc pl-4 text-gray-900 text-lg'>
-                                        {notice.points.map((point, i) => (
-                                            <li key={i}>{point}</li>
-                                        ))}
-                                    </ul>
-                                    {notice.imageUrl && <img src={notice.imageUrl} alt="Notice" className="w-full h-auto mt-2" />}
-                                    {notice.videoUrl && (
-                                        <video controls className="w-full h-auto mt-2">
-                                            <source src={notice.videoUrl} type="video/mp4" />
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    )}
-                                </div>
-                            ))}
-                    </div>
-                </div>
-            ))}
+    <div key={department} className="mb-6">
+        <h2 className="text-2xl font-semibold mb-2">{department} Department Notices</h2>
+        <div className='bg-white p-6 h-80 my-3 rounded-lg overflow-y-auto'>
+            <div className='grid grid-cols-3 gap-6'> {/* Use grid layout here */}
+                {notices
+                    .filter(notice => notice.department === department)
+                    .map((notice, index) => (
+                        <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md"> {/* Optional: Add some styling for grid items */}
+                            <div className='flex justify-between'>
+                                <div className="text-3xl font-bold text-blue-900 my-2">{notice.title}</div>
+                                <button
+                                    className='font-semibold px-2 py-1 rounded-lg bg-red-600 text-white'
+                                    onClick={() => handleDelete(index)}
+                                >
+                                    Delete Notice
+                                </button>
+                            </div>
+                            <ul className='list-disc pl-4 text-gray-900 text-lg'>
+                                {notice.points.map((point, i) => (
+                                    <li key={i}>{point}</li>
+                                ))}
+                            </ul>
+                            {notice.imageUrl && <img src={notice.imageUrl} alt="Notice" className="w-full h-auto mt-2" />}
+                            {notice.videoUrl && (
+                                <video controls className="w-full h-auto mt-2">
+                                    <source src={notice.videoUrl} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            )}
+                        </div>
+                    ))}
+            </div>
+        </div>
+    </div>
+))}
+
 
             {/* Admins Section */}
             <button
