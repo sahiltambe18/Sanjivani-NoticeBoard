@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
+
 const AddAdminPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
