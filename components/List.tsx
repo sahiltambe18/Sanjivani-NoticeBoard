@@ -1,7 +1,6 @@
 'use client'
 import { typeNotice } from '@/types/notices';
-import React, { useEffect, useRef, useState } from 'react'
-
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function List() {
   const listRef = useRef<HTMLUListElement>(null);
@@ -18,7 +17,7 @@ export default function List() {
   const [data, setData] = useState<typeNotice[]>([
     {
       points: ["Please Wait..."],
-      title: "Notices Are Loading ",
+      title: "Notices Are Loading",
       createdAt: new Date(),
       id: "adcf",
     }
@@ -60,39 +59,42 @@ export default function List() {
     <ul ref={listRef} className='w-full hide-scrollbar flex flex-col items-start text-[#fffef8] overflow-y-auto sm:pl-10' style={{ maxHeight: '100vh' }}>
       {data && data.map((notice, i) => (
         <div className='my-6 flex flex-col gap-4' key={notice.id}>
-          {notice.title && <>
-            <h2 className='text-3xl font-bold'>
-              <span className='font-light text-2xl'>{i + 1 + ".  "}</span>
-              {notice.title}
-            </h2>
-            <ul className='list-disc pl-8'>
-              {notice.points.length > 0 && notice.points.map((point, idx) => (
-                <li key={idx}>{point}</li>
-              ))}
-            </ul>
-          </>}
+          {notice.title && (
+            <>
+              <h2 className='text-3xl font-bold'>
+                <span className='font-light text-2xl'>{i + 1 + ".  "}</span>
+                {notice.title}
+              </h2>
+              <ul className='list-disc pl-8'>
+                {notice.points.length > 0 && notice.points.map((point, idx) => (
+                  <li key={idx}>{point}</li>
+                ))}
+              </ul>
+            </>
+          )}
           {(notice.imageUrl || notice.videoUrl) && (
-      <div className='flex justify-center items-center'>
-        {notice.imageUrl && (
-          <img 
-            className='w-full max-w-3xl ml-2 rounded-lg border-2 border-gray-200 object-cover mx-auto' 
-            src={notice.imageUrl} 
-            alt={notice.title} 
-          />
-        )}
-        {notice.videoUrl && (
-          <video 
-            className='w-full max-w-3xl ml-2 rounded-lg border-2 border-gray-200 object-cover mx-auto' 
-            autoPlay 
-            loop 
-            muted 
-          >
-            <source src={notice.videoUrl} />
-          </video>
-          {(notice.imageUrl || notice.videoUrl) && <p className='text-transparent' >-</p>}
+            <div className='flex justify-center items-center'>
+              {notice.imageUrl && (
+                <img 
+                  className='w-full max-w-3xl ml-2 rounded-lg border-2 border-gray-200 object-cover mx-auto' 
+                  src={notice.imageUrl} 
+                  alt={notice.title} 
+                />
+              )}
+              {notice.videoUrl && (
+                <video 
+                  className='w-full max-w-3xl ml-2 rounded-lg border-2 border-gray-200 object-cover mx-auto' 
+                  autoPlay 
+                  loop 
+                  muted 
+                >
+                  <source src={notice.videoUrl} />
+                </video>
+              )}
+            </div>
+          )}
         </div>
       ))}
-
     </ul>
   );
 }
