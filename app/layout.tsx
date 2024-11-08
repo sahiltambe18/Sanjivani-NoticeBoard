@@ -25,12 +25,20 @@ export default async function RootLayout({
   
   return (
     <html lang="en">
-      <body className={inter.className} style={{backgroundImage: `url(${bg.src})`}}  >
-      <AuthProvider session={session} >
-        {children}
-      </AuthProvider>
-      
-      </body>
-    </html>
+  <body
+    className={inter.className}
+    style={{
+      backgroundImage: `url(${bg.src})`,
+      backgroundSize: "cover",       /* Ensures the image covers the screen */
+      backgroundPosition: "center",   /* Centers the image */
+      backgroundRepeat: "no-repeat",  /* Prevents image repetition */
+    }}
+  >
+    <AuthProvider session={session}>
+      {children}
+    </AuthProvider>
+  </body>
+</html>
+
   );
 }
