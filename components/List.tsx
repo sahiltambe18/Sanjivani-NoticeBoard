@@ -71,11 +71,24 @@ export default function List() {
               ))}
             </ul>
           </>}
-          {notice.imageUrl && <img className='h-72 ml-2 rounded-lg border-2 border-gray-200' src={notice.imageUrl} alt={notice.title} />}
-          {notice.videoUrl &&
-            <video className='h-72 ml-2 rounded-lg border-2 border-gray-200' autoPlay loop muted >
-              <source src={notice.videoUrl} />
-            </video>}
+          {notice.imageUrl && (
+  <img 
+    className='w-full max-w-3xl ml-2 rounded-lg border-2 border-gray-200 object-cover' 
+    src={notice.imageUrl} 
+    alt={notice.title} 
+  />
+)}
+{notice.videoUrl && (
+  <video 
+    className='w-full max-w-3xl ml-2 rounded-lg border-2 border-gray-200 object-cover' 
+    autoPlay 
+    loop 
+    muted 
+  >
+    <source src={notice.videoUrl} />
+  </video>
+)}
+
           {(notice.imageUrl || notice.videoUrl) && <p className='text-transparent' >-</p>}
         </div>
       ))}
