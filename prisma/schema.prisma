@@ -29,3 +29,9 @@ model Notices {
   videoUrl  String?
   department String @default("toAll")
 }
+
+model Config{
+  id       String   @id @default(uuid()) @map("_id")
+  fullScreen Boolean @default(false) 
+  darkTheme Boolean @default(false)
+}
