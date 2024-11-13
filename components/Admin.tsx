@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 import AdminNavbar from './AdminNavbar';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import { handleUpload } from '@/utils/upload';
 import { typeNotice } from '@/types/notices';
 
@@ -9,7 +9,7 @@ import { typeNotice } from '@/types/notices';
 
 export default function AdminPage() {
 
-    const session = useSession()
+    // const session = useSession()
 
     const getData = async () => {
         let res = await fetch("/api/data");
@@ -24,6 +24,25 @@ export default function AdminPage() {
         let res = await fetch('/api/admin');
         const adminData = await res.json();
         setAdmins(([...adminData]))
+    }
+    const getConfig = async () => {
+        let res = await fetch('/api/config');
+        const configData = await res.json();
+        // setAdmins(([...adminData]))
+        // console.log(configData[0])
+        setFullScreen(configData[0].fullScreen);
+    }
+
+    const ToggleFullScreen = async (fullScreen:boolean)=>{
+        fetch('/api/config/',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                fullScreen
+            }),
+        })
     }
 
     const [title, setTitle] = useState('');
@@ -47,16 +66,32 @@ export default function AdminPage() {
     }
 
 
+
     useEffect(() => {
         getData()
         getAdmins()
+        getConfig()
     }, [])
 
     const [dropdownValue, setDropdownValue] = useState('');
     const [customValue, setCustomValue] = useState('');
     const [useCustomValue, setUseCustomValue] = useState(false);
+    const [fullScreen, setFullScreen] = useState(false);
 
     const predefinedOptions = departments;
+
+    const setFullScreenWrapper = ()=>{
+        
+        // console.log("new FullScreen ", fullScreen)
+        setFullScreen( prev =>{
+            const newState = !prev
+            setTimeout( async ()=>{
+                await ToggleFullScreen(newState)
+            },1000)
+            return newState
+        })
+        
+    }
 
     const handleAddPoint = () => {
         setPoints([...points, '']);
@@ -150,10 +185,12 @@ export default function AdminPage() {
         setPoints(['']);
     }
 
+    
+
 
     return (
         <div className="p-10">
-            <AdminNavbar />
+            <AdminNavbar fullScreen={fullScreen} setFullScreen={setFullScreenWrapper} />
 
             <form action={handleAction} className="mb-10">
                 <p className='text-base text-red-600'>{error}</p>
