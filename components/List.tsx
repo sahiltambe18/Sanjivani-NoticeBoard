@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { typeNotice } from '@/types/notices';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -38,28 +38,27 @@ export default function List() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    const interval =  setInterval( ()=>{
+    const interval = setInterval(() => {
       getConfig();
       getData();
-
-    },5000)
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     if (fullScreen) {
       const currentItem = data[currentIndex];
+      const videoIndex = currentIndex
 
       let timer: string | number | NodeJS.Timeout | undefined;
       if (currentItem.videoUrl) {
-        // For video: move to the next item after the video's duration
-        const videoElement = document.getElementById(`video-${currentItem.id}`);
+        const videoElement = document.getElementById(`video-${currentItem.id}`) as HTMLVideoElement;
         if (videoElement) {
-          videoElement.addEventListener('ended', handleNext);
+          videoElement.addEventListener('ended', ()=> handleNext(videoIndex));
+          videoElement.play(); 
         }
       } else {
-        
-        timer = setTimeout(handleNext, 5000); // Adjust time as needed for slideshow duration
+        timer = setTimeout(handleNext, 5000); // Adjust time for slideshow 
       }
 
       return () => {
@@ -90,8 +89,18 @@ export default function List() {
     }
   }, [fullScreen, currentIndex, data]);
 
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % data.length); // Loop to the start after the last item
+  const handleNext = (videoIndex?:number) => {
+    setCurrentIndex((prevIndex) => {
+      let nextIndex = prevIndex + 1;
+      if(videoIndex!==undefined){
+        nextIndex = videoIndex+1
+      }
+      if (nextIndex >= data.length) {
+        // Restart the cycle
+        return 0;
+      }
+      return nextIndex;
+    });
   };
 
   return (
@@ -125,9 +134,8 @@ export default function List() {
                   id={`video-${notice.id}`}
                   className={`transition-all duration-500 ${fullScreen ? 'w-full h-full object-cover' : 'w-full max-w-3xl ml-2 rounded-lg border-2 border-gray-200 object-cover mx-auto'}`}
                   autoPlay
-                  loop={!fullScreen}
+                  loop={!fullScreen} 
                   muted
-                  onEnded={fullScreen ? handleNext : undefined}
                 >
                   <source src={notice.videoUrl} />
                 </video>
@@ -139,6 +147,3 @@ export default function List() {
     </ul>
   );
 }
-
-
-// 0910
