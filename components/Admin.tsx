@@ -1,9 +1,13 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import AdminNavbar from './AdminNavbar';
 // import { useSession } from 'next-auth/react';
 import { handleUpload } from '@/utils/upload';
 import { typeNotice } from '@/types/notices';
+import { toast } from "sonner"
+import { Toaster } from './ui/sonner';
+import { Loader } from 'lucide-react'
+
 
 
 
@@ -57,6 +61,8 @@ export default function AdminPage() {
 
     const [showAdmins, setShowAdmins] = useState<boolean>(false)
     const [showNotice, setShowNotice] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
+
 
     const handleShowAdmin = () => {
         setShowAdmins(prev => !prev)
@@ -87,7 +93,7 @@ export default function AdminPage() {
             const newState = !prev
             setTimeout( async ()=>{
                 await ToggleFullScreen(newState)
-            },1000)
+            },500)
             return newState
         })
         
@@ -118,8 +124,12 @@ export default function AdminPage() {
         });
 
         if (!res.ok) {
+            toast.error("Failed to delete notice")
             console.error("Failed to delete notice");
+            return;
         }
+        toast.success("Notice deleted successfully")
+
 
     }
 
@@ -133,66 +143,86 @@ export default function AdminPage() {
         });
 
         if (!res.ok) {
-            console.error("Failed to delete notice");
+            toast.error("Failed to delete Admin")
+            console.error("Failed to delete admin");
+            return
         }
+        toast.success("Admin deleted successfully")
     }
 
     const handleAction = async (formData: FormData) => {
-        setError("")
-        let newNotice: typeNotice = { 
-            id: Math.random(),
-             title, points , 
-            department: useCustomValue ? customValue : dropdownValue
-         };
-        const fileI = formData.get("image") as unknown as File;
-        const fileV = formData.get("video") as unknown as File;
+        try {
+            setError("")
+            setLoading(true)
+            console.log("here")
+            let newNotice: typeNotice = { 
+                id: Math.random(),
+                title, points , 
+                department: useCustomValue ? customValue : dropdownValue
+            };
+            const fileI = formData.get("image") as unknown as File;
+            const fileV = formData.get("video") as unknown as File;
 
-        const maxSize = 90*1024*1024;
+            const maxSize = 90*1024*1024;
 
-        if (fileI && fileI.size>0) {
-            if(fileI.size>maxSize) {
-                setError("max size of image is 90 Mb")
-                return;
+            if (fileI && fileI.size>0) {
+                if(fileI.size>maxSize) {
+                    setError("max size of image is 90 Mb")
+                    return;
+                }
+                const data = await handleUpload(formData);
+                newNotice = { ...newNotice, imageUrl: data.url }
+                formData.set("image", "")
+            } 
+            if(fileV && fileV.size>0){
+                if(fileV.size>maxSize) {
+                    setError("max size of video is 90 Mb")
+                    return;
+                }
+                const data = await handleUpload(formData,"video");
+                newNotice = { ...newNotice, videoUrl: data.url }
+                formData.set("video", "")
+
             }
-            const data = await handleUpload(formData);
-            newNotice = { ...newNotice, imageUrl: data.url }
-            formData.set("image", "")
-        } 
-        if(fileV && fileV.size>0){
-            if(fileV.size>maxSize) {
-                setError("max size of video is 90 Mb")
-                return;
+
+            console.log(newNotice)
+            
+            setNotices([...notices, newNotice]);
+            const res = await fetch("/api/data", {
+                method: "POST",
+                body: JSON.stringify(newNotice)
+            })
+            setLoading(false)
+            if (!res.ok) {
+                toast("oops something went wrong!!",{
+                    unstyled:false,
+                    classNames: {
+                        title:"text-red-300 font-semibold"
+                    }
+                } )
+                return
             }
-            const data = await handleUpload(formData,"video");
-            newNotice = { ...newNotice, videoUrl: data.url }
-            formData.set("video", "")
+            toast.success("notice added successfully")
 
+            setTitle('');
+            setPoints(['']);
+        } catch (error) {
+            console.log(error)
+            toast.error("Error while creating notice")
         }
-
-        console.log(newNotice)
-        
-        setNotices([...notices, newNotice]);
-        const res = await fetch("/api/data", {
-            method: "POST",
-            body: JSON.stringify(newNotice)
-        })
-
-        if (!res.ok) {
-            return
-        }
-
-        setTitle('');
-        setPoints(['']);
     }
 
-    
-
+    const handleSubmit = (e:FormEvent)=>{
+        e.preventDefault()
+        const formData = new FormData(e.target as HTMLFormElement)  ;
+        handleAction(formData)
+    }
 
     return (
         <div className="p-10">
             <AdminNavbar fullScreen={fullScreen} setFullScreen={setFullScreenWrapper} />
 
-            <form action={handleAction} className="mb-10">
+            <form onSubmit={handleSubmit}  className="mb-10">
                 <p className='text-base text-red-600'>{error}</p>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Title</label>
@@ -278,9 +308,15 @@ export default function AdminPage() {
                 </div>
 
                 <button
+                    disabled={loading}
                     type="submit"
-                    className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md"
+                    className="px-4 py-2 flex gap-2 items-center shadow-xl hover:bg-green-700 disabled:bg-green-400 text-sm font-medium text-white bg-green-600 rounded-md"
                 >
+                    {loading && 
+                    <Loader className='animate-spin' />
+                    }
+
+
                     Add Notice
                 </button>
             </form>
@@ -343,6 +379,17 @@ export default function AdminPage() {
                     </div>
                 </div>
             )}
+
+                    <Toaster
+                        position='bottom-right'
+                        toastOptions={{
+                            unstyled: false,
+                            classNames: {
+                                title: 'text-green-400  font-semibold',
+                                actionButton: 'bg-green-500',
+                            },
+                        }}
+                    />
 
         </div>
     );

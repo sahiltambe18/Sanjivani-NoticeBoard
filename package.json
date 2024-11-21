@@ -13,14 +13,18 @@
     "@prisma/client": "^5.15.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.2.0",
+    "lucide-react": "^0.460.0",
     "next": "14.2.4",
     "next-auth": "^4.24.7",
+    "next-themes": "^0.4.3",
     "notice-app": "file:",
     "prisma": "^5.15.1",
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
-    "stripe": "^16.0.0"
+    "sonner": "^1.7.0",
+    "stripe": "^16.0.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
