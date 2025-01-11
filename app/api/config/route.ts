@@ -14,12 +14,14 @@ export const POST = async (req:NextRequest)=>{
         //     return new NextResponse("BAD REQUEST",{status:400});
         // }
 
-        const response = await Prisma.config.update({where:{
-            id:"51dab8fb-865b-4482-9885-d9c71def6260"
-        },data: {
-            darkTheme: true,                // Update fields as needed
-            fullScreen: data.fullScreen,
-          }});
+        const response = await Prisma.config.updateMany({
+            where:{},
+            data:{
+                darkTheme: true,                
+                fullScreen: data.fullScreen,
+            }
+          });
+          
         console.log("response", response)
 
         return new NextResponse("SUCCESS",{status:200});

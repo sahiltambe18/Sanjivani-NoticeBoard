@@ -51,7 +51,7 @@ export default function List() {
       const videoIndex = currentIndex
 
       let timer: string | number | NodeJS.Timeout | undefined;
-      if (currentItem.videoUrl) {
+      if (currentItem?.videoUrl) {
         const videoElement = document.getElementById(`video-${currentItem.id}`) as HTMLVideoElement;
         if (videoElement) {
           videoElement.addEventListener('ended', ()=> handleNext(videoIndex));
