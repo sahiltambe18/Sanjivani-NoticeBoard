@@ -276,7 +276,7 @@ export default function AdminPage() {
                     </button>
                 </div>
 
-                <div className="my-3 font-semibold">
+                <div className="my-3 font-semibold"> 
                     <label>Upload Image</label>
                     <input type="file" id="image" accept="image/*" name={"image"} className="w-full mt-1" />
                 </div>
