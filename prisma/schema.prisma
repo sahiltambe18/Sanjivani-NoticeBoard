@@ -37,7 +37,7 @@ model Config{
 }
 
 model Timer {
-  id        String    @id @default(cuid())@map("_id")
+  id        String    @id @default(cuid()) @map("_id")
   isEnabled Boolean   @default(false)
   duration  Int
   endTime   DateTime?
