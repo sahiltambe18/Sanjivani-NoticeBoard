@@ -121,7 +121,7 @@ export default function AdminPage() {
         const updatedNotices = notices.filter(notice => notice.id !== noticeId);
         setNotices(updatedNotices);
 
-        const res = await fetch(`/api/delnotice/${noticeToDelete.id}`, {
+        const res = await fetch(`/api/delnotice/${noticeId}`, {
             method: "DELETE"
         });
 
@@ -333,7 +333,7 @@ export default function AdminPage() {
                                         <div className="text-3xl font-bold text-blue-900 my-2">{notice.title}</div>
                                         <button
                                             className='font-semibold px-2 py-1 rounded-lg bg-red-600 text-white'
-                                            onClick={() => handleDelete(notice.id)}
+                                            onClick={() => handleDelete(notice.id as number)}
                                         >
                                             Delete Notice
                                         </button>
