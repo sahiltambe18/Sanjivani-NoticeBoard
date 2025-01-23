@@ -35,3 +35,11 @@ model Config{
   fullScreen Boolean @default(false) 
   darkTheme Boolean @default(false)
 }
+
+model Timer {
+  id        String    @id @default(cuid())
+  isEnabled Boolean   @default(false)
+  duration  Int
+  endTime   DateTime?
+  createdAt DateTime  @default(now())
+}

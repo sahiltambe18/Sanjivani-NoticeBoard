@@ -114,9 +114,11 @@ export default function AdminPage() {
         setPoints(newPoints);
     };
 
-    const handleDelete = async (index: number) => {
-        const noticeToDelete = notices[index];
-        const updatedNotices = notices.filter((_, i) => i !== index);
+    const handleDelete = async (noticeId: number) => {
+        const noticeToDelete = notices.find(notice => notice.id === noticeId);
+        if (!noticeToDelete) return;
+        
+        const updatedNotices = notices.filter(notice => notice.id !== noticeId);
         setNotices(updatedNotices);
 
         const res = await fetch(`/api/delnotice/${noticeToDelete.id}`, {
@@ -129,8 +131,6 @@ export default function AdminPage() {
             return;
         }
         toast.success("Notice deleted successfully")
-
-
     }
 
     const handleDeleteAdmin = async (index: number) => {
@@ -328,12 +328,12 @@ export default function AdminPage() {
                         {notices
                             .filter(notice => notice.department === department)
                             .map((notice, index) => (
-                                <div key={index} className="mb-3">
+                                <div key={notice.id} className="mb-3">
                                     <div className='flex justify-between'>
                                         <div className="text-3xl font-bold text-blue-900 my-2">{notice.title}</div>
                                         <button
                                             className='font-semibold px-2 py-1 rounded-lg bg-red-600 text-white'
-                                            onClick={() => handleDelete(index)}
+                                            onClick={() => handleDelete(notice.id)}
                                         >
                                             Delete Notice
                                         </button>
