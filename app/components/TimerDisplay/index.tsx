@@ -1,27 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 export default function TimerDisplay() {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [isEnabled, setIsEnabled] = useState(false);
   const [error, setError] = useState('');
+  const endTimeRef = useRef<number | null>(null);
 
+  // Fetch timer data from server (only periodically to sync)
   useEffect(() => {
     const fetchTimer = async () => {
       try {
         const response = await axios.get('/api/timer');
         const timer = response.data;
-        
+
         if (timer && timer.isEnabled && timer.endTime) {
           setIsEnabled(true);
-          const end = new Date(timer.endTime).getTime();
+          endTimeRef.current = new Date(timer.endTime).getTime();
           const now = Date.now();
-          setTimeLeft(Math.max(0, Math.floor((end - now) / 1000)));
+          setTimeLeft(Math.max(0, Math.floor((endTimeRef.current - now) / 1000)));
         } else {
           setIsEnabled(false);
           setTimeLeft(null);
+          endTimeRef.current = null;
         }
         setError('');
       } catch (error) {
@@ -31,9 +34,25 @@ export default function TimerDisplay() {
     };
 
     fetchTimer();
-    const interval = setInterval(fetchTimer, 1000);
-    return () => clearInterval(interval);
+    // Only sync with server every 30 seconds instead of every second
+    const syncInterval = setInterval(fetchTimer, 30000);
+    return () => clearInterval(syncInterval);
   }, []);
+
+  // Local countdown - decrement every second WITHOUT hitting the server
+  useEffect(() => {
+    if (!isEnabled || timeLeft === null) return;
+
+    const countdownInterval = setInterval(() => {
+      if (endTimeRef.current) {
+        const now = Date.now();
+        const remaining = Math.max(0, Math.floor((endTimeRef.current - now) / 1000));
+        setTimeLeft(remaining);
+      }
+    }, 1000);
+
+    return () => clearInterval(countdownInterval);
+  }, [isEnabled]);
 
   if (error) {
     return (

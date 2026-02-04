@@ -19,7 +19,8 @@ export default function VideoPlayer() {
     };
 
     fetchStreamUrl();
-    const interval = setInterval(fetchStreamUrl, 5000);
+    // Poll every 30 seconds instead of 5 seconds to reduce server load
+    const interval = setInterval(fetchStreamUrl, 30000);
     return () => clearInterval(interval);
   }, []);
 

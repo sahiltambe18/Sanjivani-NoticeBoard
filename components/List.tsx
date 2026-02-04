@@ -38,10 +38,15 @@ export default function List() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    // Initial fetch
+    getConfig();
+    getData();
+
+    // Poll every 30 seconds instead of 5 seconds to reduce server load
     const interval = setInterval(() => {
       getConfig();
       getData();
-    }, 5000);
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 
